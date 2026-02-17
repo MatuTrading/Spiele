@@ -1,11 +1,136 @@
-# Welcome to Spielidee 1
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>2D Strategie Spiel</title>
+<style>
+body {
+    background: #1e1e1e;
+    color: white;
+    text-align: center;
+    font-family: Arial;
+}
+canvas {
+    background: #2d5a27;
+    display: block;
+    margin: 20px auto;
+    border: 3px solid white;
+}
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
 
-This is the start page of our game! Here you will find the main menu and options to begin your adventure.
+<h1>⚔️ Mini Strategie Spiel</h1>
+<p>Gold: <span id="gold">100</span></p>
 
-## Main Menu
-- Start Game
-- Load Game
-- Settings
-- Exit
+<button onclick="buyUnit('infantry')">Infanterie (20 Gold)</button>
+<button onclick="buyUnit('archer')">Bogenschütze (30 Gold)</button>
+<button onclick="buyUnit('knight')">Ritter (50 Gold)</button>
 
-Enjoy your gaming experience!
+<canvas id="gameCanvas" width="800" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let gold = 100;
+let playerUnits = [];
+let enemyUnits = [];
+let wave = 1;
+
+class Unit {
+    constructor(x, y, type, side) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.side = side;
+        this.hp = type.hp;
+        this.attack = type.attack;
+        this.speed = type.speed;
+    }
+
+    update() {
+        if (this.side === "player") {
+            this.x += this.speed;
+        } else {
+            this.x -= this.speed;
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = this.side === "player" ? "blue" : "red";
+        ctx.fillRect(this.x, this.y, 20, 20);
+    }
+}
+
+const types = {
+    infantry: { hp: 50, attack: 5, speed: 0.5, cost: 20 },
+    archer: { hp: 30, attack: 8, speed: 0.7, cost: 30 },
+    knight: { hp: 100, attack: 12, speed: 0.4, cost: 50 }
+};
+
+function buyUnit(typeName) {
+    let type = types[typeName];
+    if (gold >= type.cost) {
+        gold -= type.cost;
+        document.getElementById("gold").innerText = gold;
+        playerUnits.push(new Unit(50, 200, type, "player"));
+    }
+}
+
+function spawnWave() {
+    for (let i = 0; i < wave + 2; i++) {
+        enemyUnits.push(new Unit(750, 200, types.infantry, "enemy"));
+    }
+    wave++;
+}
+
+function checkCombat() {
+    playerUnits.forEach(p => {
+        enemyUnits.forEach(e => {
+            if (Math.abs(p.x - e.x) < 20) {
+                p.hp -= e.attack * 0.1;
+                e.hp -= p.attack * 0.1;
+            }
+        });
+    });
+
+    playerUnits = playerUnits.filter(u => u.hp > 0);
+    enemyUnits = enemyUnits.filter(u => u.hp > 0);
+}
+
+function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    playerUnits.forEach(u => {
+        u.update();
+        u.draw();
+    });
+
+    enemyUnits.forEach(u => {
+        u.update();
+        u.draw();
+    });
+
+    checkCombat();
+
+    if (enemyUnits.length === 0) {
+        spawnWave();
+        gold += 50;
+        document.getElementById("gold").innerText = gold;
+    }
+
+    requestAnimationFrame(update);
+}
+
+spawnWave();
+update();
+</script>
+
+</body>
+</html>
