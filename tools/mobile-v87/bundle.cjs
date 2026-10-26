@@ -1,0 +1,20 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const crypto=require('node:crypto');
+const {createRequire}=require('node:module');
+const file=path.resolve(process.argv[2]);
+const runtime=path.resolve(process.argv[3]);
+const req=createRequire(path.join(runtime,'package.json'));
+(async()=>{
+  let html=fs.readFileSync(file,'utf8');
+  const match=html.match(/<script type="module">([\s\S]*?)<\/script>/);
+  if(!match)throw Error('Expected game module');
+  const build=await req('esbuild').build({stdin:{contents:match[1],resolveDir:runtime,sourcefile:'odin-v87.js'},bundle:true,minify:true,format:'iife',target:['es2020'],write:false,legalComments:'inline'});
+  const code=build.outputFiles[0].text.replace(/<\/script/gi,'<\\/script');
+  html=html.replace(match[0],()=>'<script type="module">'+code+'</script>').replace(/<script type="importmap">[\s\S]*?<\/script>/,'');
+  fs.writeFileSync(file,html);
+  const meta=JSON.parse(fs.readFileSync(path.join(path.dirname(file),'build.json'),'utf8'));
+  meta.candidate_sha256=crypto.createHash('sha256').update(html).digest('hex');meta.offlineBundled=true;meta.bytes=Buffer.byteLength(html);
+  fs.writeFileSync(path.join(path.dirname(file),'build.json'),JSON.stringify(meta,null,2));
+  console.log(JSON.stringify(meta));
+})();

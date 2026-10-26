@@ -1,0 +1,11 @@
+{
+  "name": "odin-mobile-v87-tools",
+  "private": true,
+  "description": "Reproducible build and browser scenarios for the separate Mobile Saga candidate",
+  "dependencies": {
+    "@sparticuz/chromium": "153.0.0",
+    "esbuild": "0.25.12",
+    "playwright": "1.62.1",
+    "three": "0.164.1"
+  }
+}

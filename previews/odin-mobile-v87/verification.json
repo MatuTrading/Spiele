@@ -1,0 +1,53 @@
+{
+  "version": "87-mobile-saga",
+  "candidate_sha256": "814bcc48b9eb060fbc4a5ec528f11bee262e887f6e66e2220232d898594e128e",
+  "tests": {
+    "touch": {
+      "status": "passed",
+      "checks": {
+        "webgl": true,
+        "build": true,
+        "upgrade": true,
+        "saleCancel": true,
+        "move": true,
+        "restore": true,
+        "wave": true,
+        "pauseFreezes": true,
+        "menuPause": true,
+        "layout360": true,
+        "layout740": true,
+        "layout1440": true,
+        "dragNoBuild": true,
+        "pinchNoBuild": true,
+        "offlineFileStart": true
+      },
+      "errors": []
+    },
+    "combat": {
+      "status": "passed",
+      "checks": {
+        "threeClasses": true,
+        "chiefVisible": true,
+        "frostSlow": true,
+        "bowRunning": true,
+        "detourObserved": false,
+        "battleMovement": true,
+        "waveTerminates": true
+      },
+      "errors": []
+    },
+    "motion_and_defeat": {
+      "status": "passed",
+      "checks": {
+        "motion": true,
+        "defeat": true,
+        "replay": true
+      },
+      "errors": []
+    }
+  },
+  "minimum_sampled_enemy_spacing": 0.4065277058282739,
+  "minimum_sampled_crossing_spacing": 0.45894975731772597,
+  "real_android_performance_tested": false,
+  "live_published": false
+}
