@@ -114,6 +114,7 @@ function restoreCheckpoint(){
     const mesh=makeUnit(spec.type);mesh.position.set(spec.x,groundY(spec.x,spec.z),spec.z);scene.add(mesh);
     const ring=makeSelectionRing();mesh.add(ring);const t={mesh,type:spec.type,level:spec.level,ring,cd:0,anim:0,moveRoute:null};makeUpgradeCape(t);towers.push(t);
   }
+  choice=null;for(const b of document.querySelectorAll('[data-unit]')){b.classList.remove('active');b.setAttribute('aria-pressed','false');}
   $('introOverlay').hidden=true;selectTower(null);updatePauseButton();ui();syncMusic();notify('Willkommen zurück! Welle '+(wave+1)+' wartet.');freshCheckpoint();
 }
 function setupCheckpoint(){

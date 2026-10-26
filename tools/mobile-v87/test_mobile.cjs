@@ -25,7 +25,7 @@ async function tapWorld(page,x,z){
   const url='http://127.0.0.1:'+server.address().port;
   await page.goto(url);await page.locator('#playGameBtn').waitFor({state:'visible',timeout:45000});
   await shot(page,'01-intro');await page.locator('#playGameBtn').tap();
-  result.initial=await state(page);assert.equal(result.initial.version,'87-mobile-saga');
+  result.initial=await state(page);assert.equal(result.initial.version,process.env.ODIN_EXPECT_VERSION||'88-mobile-saga');
   assert(await page.evaluate(()=>!!document.querySelector('canvas').getContext('webgl2')));result.checks.webgl=true;
   await ctx.setOffline(true); // No CDN fetch is permitted after the initial document.
   await shot(page,'02-mobile-world');

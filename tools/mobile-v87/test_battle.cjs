@@ -26,7 +26,7 @@ for(const type of ['archer','mage','knight']){
  // The initial archer selection is already active; ensure the category is on.
  if((await page.locator('[data-unit="'+type+'"]').getAttribute('aria-pressed'))!=='true')await page.locator('[data-unit="'+type+'"]').tap();
  const sites=await page.evaluate(points=>points.map(([x,z])=>OdinTest.locationInfo(x,z)),candidates);
- const site=sites.filter(p=>p.land&&!p.blocked&&!p.occupied&&p.roadDistance>.44&&p.roadDistance<1.6&&p.visible).sort((a,b)=>Math.hypot(a.x-7,a.z+3.7)-Math.hypot(b.x-7,b.z+3.7)).find(p=>p.screen.y<640);
+ const site=sites.filter(p=>p.land&&!p.blocked&&!p.occupied&&p.roadDistance>.64&&p.roadDistance<1.6&&p.visible).sort((a,b)=>Math.hypot(a.x-7,a.z+3.7)-Math.hypot(b.x-7,b.z+3.7)).find(p=>p.screen.y<640);
  assert(site,'No valid '+type+' build site');
  await page.touchscreen.tap(site.screen.x,site.screen.y);
  assert.equal((await state(page)).selectedTower,type,'Build action did not select '+type);

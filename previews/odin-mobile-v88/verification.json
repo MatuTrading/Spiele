@@ -1,0 +1,45 @@
+{
+  "version": "88-mobile-saga",
+  "sha256": "c215b82052cc2319feab65f1519ffca02001c4faa4967b641b07886dd70b7614",
+  "baseline_block_reproduced": true,
+  "all_three_branches_pass": [
+    2,
+    0,
+    1
+  ],
+  "road_clearing_distance": 0.8262655188860293,
+  "minimum_sampled_spacing": 0.6979002445553731,
+  "checks": {
+    "baseline": {
+      "status": "passed"
+    },
+    "crossroad": {
+      "status": "passed"
+    },
+    "touch": {
+      "webgl": true,
+      "build": true,
+      "upgrade": true,
+      "saleCancel": true,
+      "move": true,
+      "restore": true,
+      "wave": true,
+      "pauseFreezes": true,
+      "menuPause": true,
+      "layout360": true,
+      "layout740": true,
+      "layout1440": true,
+      "dragNoBuild": true,
+      "pinchNoBuild": true,
+      "offlineFileStart": true
+    },
+    "motion_and_defeat": {
+      "motion": true,
+      "defeat": true,
+      "replay": true
+    }
+  },
+  "javascript_errors": 0,
+  "live_published": false,
+  "android_hardware_tested": false
+}

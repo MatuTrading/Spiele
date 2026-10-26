@@ -1,5 +1,13 @@
 # Mobile Saga V87
 
+## V88 road-priority correction
+
+The current builder produces V88 and preserves the V87 checkpoint format. Stranded defenders leave the shared lanes through validated ground-level paths. Interrupted destinations remain pending until approaching traffic has passed. Placement keeps wider road clearance. Nearby destinations use collision-checked local connectors; road graph links also check scenery bounds. Barbarians preserve turning room near tight forks across all three route branches.
+
+`test_crossroad.cjs INPUT OUTPUT RUNTIME baseline` reproduces the original block using the actual V87 artifact. Run the same script with `fixed` against V88 to require passage on all three branches, a cleared shoulder, and nonintersecting actors. The scenario uses a saved-game fixture with a stranded archer, not fabricated enemies or a modified game loop.
+
+The touch test defaults to V88; set `ODIN_EXPECT_VERSION=87-mobile-saga` when explicitly testing the historical V87 build. The named source directory is retained so existing development tooling paths continue to work.
+
 This builds a separate candidate from the supplied V86 Meine-Spielwelt HTML. It does not replace the repository's live index.html. Original embedded world, figures, animations and music are preserved.
 
 Install the pinned dependencies in an isolated runtime directory using this directory's package.json. Then, from the repository root:

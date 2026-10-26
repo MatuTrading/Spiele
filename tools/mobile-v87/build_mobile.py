@@ -145,13 +145,16 @@ replace("  if(!worldIsReady) return;\n  paused=!paused;", "  if(!worldIsReady||r
 replace("  $('pause').textContent=paused?'▶ Weiter':'⏸ Pause';", "  updatePauseButton();syncMusic();")
 replace("  notify('Neues Spiel! Platziere deine Verteidiger.');", "  resetExperience();notify('Neues Abenteuer! Platziere deine Verteidiger.');")
 replace("    if(choice)notify(choice==='erase'?'Klicke auf einen Krieger zum Entfernen.':towerNames[choice]+' ausgewählt.');", "    if(choice)notify(choice==='erase'?'Klicke auf einen Krieger zum Entfernen.':towerNames[choice]+' ausgewählt. Tippe neben einen Weg.');")
+replace('function routeForMoving(start,end){','function routeForMoving(start,end){\n  const connector=nearbyWalkRoute(start,end);if(connector)return connector;')
+replace('      edges[a].push([b,d]);edges[b].push([a,d]);','      if(segmentClear(nodes[a],nodes[b],.12)){edges[a].push([b,d]);edges[b].push([a,d]);}')
+replace('if(d<.20&&Math.abs(nodes[i].y-nodes[k].y)<.30){','if(d<.20&&Math.abs(nodes[i].y-nodes[k].y)<.30&&segmentClear(nodes[i],nodes[k],.12)){')
 section('function moveTowerStep(t,dt){','function snapOffRoad',r'''function moveTowerStep(t,dt){
   const queue=t.moveRoute;if(!queue?.length){t.moveRoute=null;return false;}
   const from=t.mesh.position,to=queue[0],walk=dt*1.65;
   const ahead=queue[Math.min(queue.length-1,5)],forward=ahead.clone().sub(from);forward.y=0;if(forward.lengthSq()<.00001)forward.set(0,0,1);forward.normalize();
   const blockers=[...towers.filter(o=>o!==t),...enemies].filter(o=>Math.abs(o.mesh.position.y-from.y)<.65);
   const blocker=blockers.find(o=>{const d=o.mesh.position.clone().sub(from);return d.length()<1.0&&d.dot(forward)>-.12&&Math.abs(d.x*forward.z-d.z*forward.x)<.48;});
-  if(blocker&&!t.detouring&&simTime>(t.retryAfter||0)){
+  if(blocker&&!t.yielding&&!t.detouring&&simTime>(t.retryAfter||0)){
     const rejoin=Math.min(queue.length-1,10),goal=queue[rejoin],perp=new THREE.Vector3(-forward.z,0,forward.x),center=blocker.mesh.position;
     let detour=null;
     for(const side of [t.avoidSide||1,-(t.avoidSide||1)]){
@@ -165,19 +168,45 @@ section('function moveTowerStep(t,dt){','function snapOffRoad',r'''function move
   }
   const target=queue[0],direction=target.clone().sub(from);direction.y=0;const dist=direction.length();
   const candidate=dist<=walk?target.clone():from.clone().lerp(target,walk/Math.max(dist,.0001));
-  if(obstacleAt(candidate.x,candidate.z,candidate.y,.12)||!segmentClear(from,candidate,.12)){t.moveRoute=null;t.detouring=null;notify('Dieser Weg ist blockiert. Wähle ein anderes Ziel.');return false;}
+  if(obstacleAt(candidate.x,candidate.z,candidate.y,.12)||!segmentClear(from,candidate,.12)){if(!t.resumeDestination&&queue.length)t.resumeDestination=queue[queue.length-1].clone();trafficLog(t,'terrain-stop');t.moveRoute=null;t.detouring=null;t.yielding=false;t.yieldTarget=null;t.resumeNotBefore=simTime+.45;notify('Der Krieger sucht einen freien Straßenanschluss.');return false;}
   for(const other of blockers){
     const p=other.mesh.position,after=Math.hypot(candidate.x-p.x,candidate.z-p.z),before=Math.hypot(from.x-p.x,from.z-p.z);
-    if(after<.44&&after<=before+.001)return false;
+    if(after<.44&&after<=before+.001){
+      if(t.yielding){t.yieldStuck=(t.yieldStuck||0)+dt;if(t.yieldStuck>.45){t.moveRoute=null;t.yielding=false;t.yieldTarget=null;t.yieldRetry=simTime+.18;}}
+      return false;
+    }
   }
-  from.copy(candidate);if(dist<=Math.max(walk,.01)){queue.shift();if(t.detouring===target)t.detouring=null;}
+  t.yieldStuck=0;from.copy(candidate);if(dist<=Math.max(walk,.01)){queue.shift();if(t.detouring===target)t.detouring=null;}
   if(dist>.001){const yaw=Math.atan2(direction.x,direction.z),delta=Math.atan2(Math.sin(yaw-t.mesh.rotation.y),Math.cos(yaw-t.mesh.rotation.y));t.mesh.rotation.y+=delta*Math.min(1,dt*14);}
   if(selectedTower===t)updateRangePreview(t);
-  if(!queue.length){t.moveRoute=null;t.detouring=null;notify(towerNames[t.type]+' ist angekommen.');freshCheckpoint();}
+  if(!queue.length){
+    trafficLog(t,t.yielding?'yield-complete':'arrived');
+    t.moveRoute=null;t.detouring=null;const yielded=t.yielding;t.yielding=false;t.yieldTarget=null;
+    if(yielded){t.resumeNotBefore=simTime+.65;if(selectedTower===t)notify(t.resumeDestination?'Wartet am Rand und läuft danach weiter.':'Die Straße ist frei.');}
+    else {t.resumeDestination=null;notify(towerNames[t.type]+' ist angekommen.');}
+    freshCheckpoint();
+  }
   return true;
 }
 ''')
 replace("function placeAt(clientX,clientY){", "function placeAt(clientX,clientY){\n  if(!gameStarted||runEnded||!$('gameMenu').hidden||!$('safeConfirm').hidden)return;")
+replace('  if(pathDistance(pos.x,pos.z)<.40){','  if(pathDistance(pos.x,pos.z)<.62){')
+section('function snapOffRoad(p){','function placeAt',r'''function snapOffRoad(p){
+  if(pathDistance(p.x,p.z)>=.62)return p;
+  for(let radius=.12;radius<=1.2;radius+=.12){
+    let best=null,score=Infinity;
+    for(let j=0;j<32;j++){
+      const ang=j*Math.PI/16,x=p.x+Math.cos(ang)*radius,z=p.z+Math.sin(ang)*radius,y=groundY(x,z);
+      if(pathDistance(x,z)<.62||!isLandPoint(x,z)||Math.abs(y-p.y)>.23||obstacleAt(x,z,y,.18))continue;
+      if(unitOccupantAt(new THREE.Vector3(x,y,z),movingTower,true,.58))continue;
+      const value=radius+Math.abs(y-p.y)*2;if(value<score){score=value;best=new THREE.Vector3(x,y,z);}
+    }
+    if(best)return best;
+  }
+  return null;
+}
+''')
+replace('    moved.moveRoute=walking.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.z));','    moved.moveRoute=walking.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.z));moved.resumeDestination=null;moved.yielding=false;moved.yieldTarget=null;')
 replace("  // Road hexagon tiles are valid; actual route centerlines are kept clear.","  if(towers.length>=40){notify('Deine Armee ist vollständig. Verbessere oder versetze deine 40 Verteidiger.');return;}\n  // Road hexagon tiles are valid; actual route centerlines are kept clear.")
 # Keep all touch pointers: a two-finger gesture must never place a warrior.
 section("renderer.domElement.addEventListener('pointerdown'",'// Expose a small safe diagnostic',r'''const activePointers=new Set();
@@ -199,17 +228,19 @@ renderer.domElement.addEventListener('pointerup',e=>{
 renderer.domElement.addEventListener('pointercancel',e=>{activePointers.delete(e.pointerId);pointerDown=null;});
 ''')
 replace('worldIsReady,terrainMeshes:',"version:'87-mobile-saga',gameSpeed,waveTarget,downThisWave,runEnded,enemyKinds:enemies.map(e=>e.kind),enemyPositions:enemies.map(e=>[e.mesh.position.x,e.mesh.position.y,e.mesh.position.z]),worldIsReady,terrainMeshes:")
+replace('movingUnits:towers.filter(t=>t.moveRoute?.length).length,','movingUnits:towers.filter(t=>t.moveRoute?.length).length,pendingRelocations:towers.filter(t=>t.resumeDestination).length,')
 replace('enemyBranches:enemies.map(e=>e.routeIndex),paused,moveQueueLengths:', 'enemyBranches:enemies.map(e=>e.routeIndex),moveQueueLengths:')
 replace('  placeAt, selectTower, pickGround, upgradeCost',r'''  placeAt, selectTower, pickGround, upgradeCost,
   locationInfo:(x,z)=>{const y=groundY(x,z),p=new THREE.Vector3(x,y,z),v=p.clone().project(camera),r=renderer.domElement.getBoundingClientRect(),screen={x:r.left+(v.x+1)*r.width/2,y:r.top+(1-v.y)*r.height/2},hit=pickGround(screen.x,screen.y);return {x,z,y,screen,land:isLandPoint(x,z),blocked:obstacleAt(x,z,y,.18),roadDistance:pathDistance(x,z),occupied:unitOccupantAt(p,null,true,.6),visible:!!hit&&hit.point.distanceTo(p)<.2};},
   projectPoint:(x,z,above=0)=>{const r=renderer.domElement.getBoundingClientRect(),v=new THREE.Vector3(x,groundY(x,z)+above,z).project(camera);return {x:r.left+(v.x+1)*r.width/2,y:r.top+(1-v.y)*r.height/2};},
-  inspect:()=>({enemies:enemies.map(e=>({kind:e.kind,hp:e.hp,max:e.max,slowUntil:e.slowUntil,armor:e.armor,siege:e.siege})),units:towers.map(t=>({state:t.mesh.userData.state,bowRunning:!!t.mesh.userData.character?.userData.odinBow?.userData.wasRunning,detouring:!!t.detouring})),simTime,quality})''')
-replace('  updateCastleBar();\n  // Ein vom Spieler',"  updateCastleBar();\n  if(paused||runEnded)return;simTime+=dt;\n  // Ein vom Spieler")
+  inspect:()=>({enemies:enemies.map(e=>({kind:e.kind,hp:e.hp,max:e.max,slowUntil:e.slowUntil,armor:e.armor,siege:e.siege})),units:towers.map(t=>({state:t.mesh.userData.state,bowRunning:!!t.mesh.userData.character?.userData.odinBow?.userData.wasRunning,detouring:!!t.detouring,yielding:!!t.yielding,resumePending:!!t.resumeDestination,trafficHistory:t.trafficHistory||[]})),simTime,quality})''')
+replace('  updateCastleBar();\n  // Ein vom Spieler',"  updateCastleBar();\n  if(paused||runEnded)return;simTime+=dt;clearRoadPriority();\n  // Ein vom Spieler")
 replace("    t.didMoveThisFrame=Boolean(t.moveRoute?.length);\n    if(t.didMoveThisFrame){\n      moveTowerStep(t,dt);\n      animateUnit(t.mesh,'run',tNow,dt);\n    }", "    t.didMoveThisFrame=Boolean(t.moveRoute?.length);\n    if(t.didMoveThisFrame){\n      const moved=moveTowerStep(t,dt);animateUnit(t.mesh,moved?'run':'idle',tNow,dt);\n    }")
 replace('spawned<Math.min(8+wave*3,45)','spawned<waveTarget')
 replace("        spawn();\n        spawned++;\n        spawnTimer=Math.max(.55,1.0-wave*.012+Math.random()*.5);", "        if(spawn())spawned++;\n        spawnTimer=Math.max(.62,1.18-wave*.025);")
 section('    if(spawned>=Math.min(8+wave*3,45)','  for(let e of [...enemies])',"    if(spawned>=waveTarget&&!enemies.length)waveVictory();\n  }\n\n")
 replace('    let remaining=e.siege?0:dt*e.speed;', '    const oldIndex=e.index,oldT=e.t;\n    let remaining=e.siege?0:dt*e.speed*(e.slowUntil>simTime?(e.slowFactor||1):1);')
+replace('    // Small stagger in each branch:', '    if(!e.siege&&queueLeaderAhead(e))remaining=0;\n    // Small stagger in each branch:')
 replace('    // Stop at the gate: do not walk through the castle or disappear on arrival.',r'''    if(!e.siege){
       const a=e.route[e.index],b=e.route[Math.min(e.index+1,e.route.length-1)],next=a.clone().lerp(b,e.t);next.y=groundY(next.x,next.z)+.02;
       const occupants=[...enemies.filter(o=>o!==e),...towers];
@@ -228,12 +259,13 @@ replace('    e.mesh.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);', '    const yaw=Mat
 section("        s.victim.hp=Math.max(0,s.victim.hp-s.damage);",'      }\n      scene.remove(s.mesh);shots.splice',r'''        const center=s.victim.mesh.position.clone();damageEnemy(s.victim,s.damage,s.type);
         if(s.type==='knight')for(const other of [...enemies])if(other!==s.victim&&other.mesh.position.distanceTo(center)<.8)damageEnemy(other,Math.round(s.damage*.55),'splash');
 ''')
-enhance=root.joinpath('experience.js').read_text()
+enhance=root.joinpath('experience.js').read_text()+'\n'+root.joinpath('traffic.js').read_text()
 replace('let last=performance.now();function loop(now){',enhance+'\nlet last=performance.now();function loop(now){')
 replace('last=now;\n  try{update(dt);}', 'last=now;dt*=gameSpeed;\n  try{update(dt);mobileTick();}')
 replace("camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)","resizeStage(true)")
 a.destination.parent.mkdir(parents=True,exist_ok=True)
+s=s.replace('87-mobile-saga','88-mobile-saga').replace('Mobile Saga V87','Mobile Saga V88').replace('Mobile Saga · V87','Mobile Saga · V88')
 a.destination.write_text(s)
-manifest={'version':'87-mobile-saga','source_sha256':hashlib.sha256(source.encode()).hexdigest(),'candidate_sha256':hashlib.sha256(s.encode()).hexdigest(),'live_published':False}
+manifest={'version':'88-mobile-saga','source_sha256':hashlib.sha256(source.encode()).hexdigest(),'predecessor_sha256':'814bcc48b9eb060fbc4a5ec528f11bee262e887f6e66e2220232d898594e128e','candidate_sha256':hashlib.sha256(s.encode()).hexdigest(),'live_published':False}
 a.destination.with_name('build.json').write_text(json.dumps(manifest,indent=2))
 print(json.dumps(manifest))

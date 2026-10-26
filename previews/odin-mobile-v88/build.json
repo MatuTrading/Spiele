@@ -1,0 +1,9 @@
+{
+  "version": "88-mobile-saga",
+  "source_sha256": "d030ed5d775385d66f06db88d117f89b5d8dd900d7e16e61c0bbb531c328de8b",
+  "predecessor_sha256": "814bcc48b9eb060fbc4a5ec528f11bee262e887f6e66e2220232d898594e128e",
+  "candidate_sha256": "c215b82052cc2319feab65f1519ffca02001c4faa4967b641b07886dd70b7614",
+  "live_published": false,
+  "offlineBundled": true,
+  "bytes": 14566720
+}

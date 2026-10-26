@@ -16,8 +16,9 @@ await context.addInitScript(()=>{
 page=await context.newPage();page.on('pageerror',e=>result.errors.push(e.message));
 const url='http://127.0.0.1:'+server.address().port;
 await page.goto(url+'/motion');await page.locator('#continueGameBtn').waitFor({state:'visible',timeout:45000});await page.locator('#continueGameBtn').tap();
+await page.waitForFunction(()=>!OdinTest.getState().movingUnits&&!OdinTest.getState().pendingRelocations,{timeout:15000});
 await page.locator('#start').tap();await page.locator('#confirmWaveBtn').tap();
-const unit=await page.evaluate(()=>OdinTest.projectPoint(7.93,-2.47,.4));await page.touchscreen.tap(unit.x,unit.y);assert.equal((await state(page)).selectedTower,'archer');
+const unit=await page.evaluate(()=>{const p=OdinTest.getState().towerPositions[0];return OdinTest.projectPoint(p[0],p[2],.4)});await page.touchscreen.tap(unit.x,unit.y);assert.equal((await state(page)).selectedTower,'archer');assert.equal((await state(page)).defenders,1);
 await page.locator('#moveTowerBtn').tap();const goal=await page.evaluate(()=>OdinTest.projectPoint(6.2,-2.7));await page.touchscreen.tap(goal.x,goal.y);
 assert((await state(page)).movingUnits>0);let detourSeen=false,minDistance=100,bowRun=false;
 const started=Date.now();
@@ -26,8 +27,8 @@ while(Date.now()-started<35000){
  if(d.i.units.some(u=>u.bowRunning))bowRun=true;
  if(d.i.units.some(u=>u.detouring)&&!detourSeen){detourSeen=true;await page.screenshot({path:path.join(out,'detour.png')});}
  for(const e of d.s.enemyPositions)if(Math.abs(e[1]-t[1])<.65)minDistance=Math.min(minDistance,Math.hypot(e[0]-t[0],e[2]-t[2]));
- result.motionSamples.push({time:Date.now()-started,position:t,queue:d.s.moveQueueLengths[0],detour:d.i.units[0].detouring});
- if(!d.s.movingUnits){result.motionEnd=d.s;break;}
+ result.motionSamples.push({time:Date.now()-started,position:t,queue:d.s.moveQueueLengths[0],detour:d.i.units[0].detouring,traffic:d.i.units[0]});
+ if(!d.s.movingUnits&&!d.s.pendingRelocations){result.motionEnd=d.s;break;}
  await page.waitForTimeout(160);
 }
 result.detourSeen=detourSeen;result.minDistance=minDistance;
