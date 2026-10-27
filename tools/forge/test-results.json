@@ -1,0 +1,215 @@
+{
+  "version": "V15",
+  "sha256": "e0e0b6ab435db31cb8e89efd14b51a7e17b264e17e43f0ce2e1bba77b6ef4ad6",
+  "checks": [
+    {
+      "name": "Offline-bundled app initializes with WebGL2 and 23 bones",
+      "webgl": "WebGL2",
+      "bones": 23
+    },
+    {
+      "name": "Preset starter: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 7
+    },
+    {
+      "name": "Preset guardian: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 8
+    },
+    {
+      "name": "Preset arcane: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 8
+    },
+    {
+      "name": "Preset rogue: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 8
+    },
+    {
+      "name": "Preset rangerknight: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 7
+    },
+    {
+      "name": "Preset skeleton: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 10
+    },
+    {
+      "name": "Preset necromancer: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 10
+    },
+    {
+      "name": "Preset minion: finite geometry and animated GLB roundtrip",
+      "bones": 23,
+      "meshes": 9
+    },
+    {
+      "name": "All 10 original characters assembled through category selector"
+    },
+    {
+      "name": "Part selector and slider stay synchronized"
+    },
+    {
+      "name": "Part slider changes geometry via keyboard"
+    },
+    {
+      "name": "Texture recoloring reaches 100% and updates the visible model"
+    },
+    {
+      "name": "Undo and redo restore colors and geometry"
+    },
+    {
+      "name": "Live name preview"
+    },
+    {
+      "name": "Animation search and real pause"
+    },
+    {
+      "name": "Timeline scrubbing pauses and sets a real animation pose"
+    },
+    {
+      "name": "Animation resumes"
+    },
+    {
+      "name": "All 132 animations produce finite skinned vertices in a sampled end pose"
+    },
+    {
+      "name": "Export/reimport button reports a successful parsed GLB"
+    },
+    {
+      "name": "Downloaded static.glb includes 0 animation(s)",
+      "bytes": 462372
+    },
+    {
+      "name": "Downloaded animated.glb includes 1 animation(s)",
+      "bytes": 525548
+    },
+    {
+      "name": "Downloaded all-animations.glb includes 132 animation(s)",
+      "bytes": 7649116
+    },
+    {
+      "name": "All-animation GLB reloads with all 132 clips and valid skinning"
+    },
+    {
+      "name": "Downloaded animated GLB rendered in a separate clean viewer"
+    },
+    {
+      "name": "JSON recipe restores parts, colors, name and animation across families"
+    },
+    {
+      "name": "Invalid recipe is rejected before mutating the current figure"
+    },
+    {
+      "name": "Draft survives page reload"
+    },
+    {
+      "name": "Camera drag and wheel zoom"
+    },
+    {
+      "name": "Front, back and turntable controls"
+    },
+    {
+      "name": "PNG screenshot download"
+    },
+    {
+      "name": "Quality switching"
+    },
+    {
+      "name": "Tablet controls remain beside the viewport at 721, 768, 1024 and 1100px"
+    },
+    {
+      "name": "Touch tabs and persistent preview at 360, 390, 412 portrait and 740 landscape; no horizontal overflow"
+    },
+    {
+      "name": "Preview remains visible while scrolling to legs and accessories"
+    },
+    {
+      "name": "Single-finger camera rotation using dispatched touch events"
+    },
+    {
+      "name": "Two-finger pinch changes camera zoom"
+    },
+    {
+      "name": "Direct local HTML launch with browser network offline"
+    },
+    {
+      "name": "No uncaught JavaScript errors or browser console errors"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "screenshots": [
+    "01-desktop.png",
+    "preset-starter.png",
+    "preset-guardian.png",
+    "preset-arcane.png",
+    "preset-rogue.png",
+    "preset-rangerknight.png",
+    "preset-skeleton.png",
+    "preset-necromancer.png",
+    "preset-minion.png",
+    "source-Barbarian.png",
+    "source-Knight.png",
+    "source-Mage.png",
+    "source-Ranger.png",
+    "source-Rogue.png",
+    "source-Rogue_Hooded.png",
+    "source-Skeleton_Mage.png",
+    "source-Skeleton_Minion.png",
+    "source-Skeleton_Rogue.png",
+    "source-Skeleton_Warrior.png",
+    "02-color.png",
+    "03-walk-pose.png",
+    "pose-0-30.png",
+    "pose-0-70.png",
+    "pose-1-30.png",
+    "pose-1-70.png",
+    "pose-2-30.png",
+    "pose-2-70.png",
+    "pose-3-30.png",
+    "pose-3-70.png",
+    "pose-4-30.png",
+    "pose-4-70.png",
+    "pose-5-30.png",
+    "pose-5-70.png",
+    "pose-6-30.png",
+    "pose-6-70.png",
+    "pose-7-30.png",
+    "pose-7-70.png",
+    "04-reimported-glb.png",
+    "05-back.png",
+    "tablet-721.png",
+    "tablet-768.png",
+    "tablet-1024.png",
+    "tablet-1100.png",
+    "mobile-360-figure.png",
+    "mobile-360-parts.png",
+    "mobile-360-motion.png",
+    "mobile-360-export.png",
+    "mobile-390-figure.png",
+    "mobile-390-parts.png",
+    "mobile-390-motion.png",
+    "mobile-390-export.png",
+    "mobile-412-figure.png",
+    "mobile-412-parts.png",
+    "mobile-412-motion.png",
+    "mobile-412-export.png",
+    "mobile-740-figure.png",
+    "mobile-740-parts.png",
+    "mobile-740-motion.png",
+    "mobile-740-export.png",
+    "06-mobile-scrolled-parts.png",
+    "07-offline-file.png"
+  ],
+  "limits": [
+    "Software rendering in Chromium; no physical Android device",
+    "Animations inspected in selected poses; not an exhaustive artistic review of every frame",
+    "No new vampire geometry or weapon attachment system in this version"
+  ],
+  "status": "passed"
+}
