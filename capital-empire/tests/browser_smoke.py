@@ -3,7 +3,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parent.parent
 def bundled_html(saved=None):
-    html=(ROOT/'index.html').read_text()
+    html=(ROOT/'dev.html').read_text()
     css=(ROOT/'styles.css').read_text()
     source=[]
     import re
