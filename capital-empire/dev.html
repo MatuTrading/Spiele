@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1524"><meta name="description" content="Capital Empire – ein spielbarer Börsen- und Private-Markets-Tycoon.">
+  <title>Capital Empire · Dein Finanzimperium</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">CE<span>◆</span></div><div><strong>CAPITAL<br>EMPIRE</strong><small>INVESTMENT TYCOON</small></div></div>
+      <div class="brand-rule"></div>
+      <div class="side-label">SPIELWELT</div>
+      <nav id="navigation" aria-label="Hauptnavigation"></nav>
+      <div class="side-footer"><span class="pulse"></span><span>AUTOSAVE AKTIV</span><button id="settingsBtn" aria-label="Einstellungen" title="Spielstand und Einstellungen">⚙</button></div>
+    </aside>
+    <div class="shell">
+      <header class="topbar">
+        <div class="top-title"><small>DEIN INVESTMENTHAUS</small><strong id="companyBrand">MATU CAPITAL</strong></div>
+        <div class="top-stats"><div class="top-stat"><small>LIQUIDITÄT</small><b id="cashStat">250.000 €</b></div><div class="top-stat"><small>EIGENVERMÖGEN</small><b id="wealthStat">250.000 €</b></div><div class="top-stat reputation"><small>REPUTATION</small><b id="repStat">10 / 100</b></div></div>
+        <div class="timebox"><div><small>SPIELZEIT</small><strong id="dateStat">JAN 2027</strong></div><div class="time-buttons"><button class="speed" data-speed="0" title="Pause">Ⅱ</button><button class="speed active" data-speed="1" title="Normale Geschwindigkeit">▶</button><button class="speed" data-speed="3" title="Dreifache Geschwindigkeit">3×</button><button class="speed" data-speed="10" title="Zehnfache Geschwindigkeit">10×</button><button id="nextMonth" title="Einen Monat vorspulen">⇥</button></div></div>
+      </header>
+      <main id="screen" tabindex="-1"></main>
+      <footer class="mobile-nav" id="mobileNavigation" aria-label="Mobile Navigation"></footer>
+    </div>
+  </div>
+  <div id="modalLayer" class="modal-layer hidden" role="presentation"></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>
