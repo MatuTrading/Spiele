@@ -4,27 +4,38 @@ Ein deutschsprachiges, responsives Browser-Spiel ohne externe Laufzeitbibliothek
 
 ## Spielen
 
-- **Online:** GitHub Pages unter dem Unterordner `capital-empire/`.
-- **Offline:** `Capital_Empire_Offline.html` aus dem Releasepaket direkt im Browser öffnen. Die modularen Quelldateien (`index.html`, `.mjs`, `.css`) benötigen lokal einen kleinen HTTP-Server, da Webbrowser ES-Module aus `file://` aus Sicherheitsgründen oft blockieren.
-- **Start:** Firma benennen, erste Aktie kaufen, einen Deal analysieren und investieren, Team und Büro ausbauen, eigene Fonds auflegen.
+- **Online:** [Capital Empire auf GitHub Pages](https://matutrading.github.io/Spiele/capital-empire/)
+- **Offline:** `index.html` direkt im Browser öffnen oder `Capital_Empire_Offline.html` aus dem Releasepaket verwenden. Beide enthalten alle Spielkomponenten als eine einzige HTML-Datei.
+- **Einstieg:** Firma benennen, erste Aktie kaufen, einen Deal analysieren und investieren, Team und Büro ausbauen, eigene Fonds auflegen.
 
-## Technik
+## Entwicklungsstruktur
 
-- HTML5/CSS, Vanilla JavaScript als ES-Module, HTML5 Canvas (animierte isometrische **2.5D**-Büroszene). **Keine echte Three.js-/WebGL-3D-Welt.**
-- 12 synthetische Aktienwerte aus 4 Branchen und 12 Dealtypen aus 4 Private-Markets-Klassen.
-- Gemeinsame monatliche Wirtschafts-, Zins-, Inflations- und Branchenfaktoren.
-- Aktienorders mit Spread, Gebühren, Einstandsbasis, realisierten/unrealisierten Ergebnissen und Dividenden.
-- Private-Equity-, Private-Debt-, Infrastruktur- und Immobilien-Zahlungsströme sowie Risikoszenarien.
-- Fonds mit getrenntem Anlegervermögen, Commitment, Abrufen, NAV, Management Fees, Carry und Ausschüttungen.
-- Autosave mittels Local Storage; JSON-Export/Import; spielbare Geschwindigkeiten 0×/1×/3×/10×, Monatsvorschub.
-- Sämtliche dargestellten Unternehmen und Deals sind fiktiv. Die Simulation ist kein Finanzratgeber.
+- `index.html`: Produktions- und Offline-Bundle, **eigenständig direkt startbar**.
+- `dev.html`: Modulare Entwickler-Startseite, lokal über HTTP-Server starten (ES-Module aus `file://` können blockiert sein).
+- `data.mjs`: fiktive Unternehmen und Private-Markets-Deals.
+- `engine.mjs`: reproduzierbare Wirtschafts- und Buchhaltungslogik.
+- `office.mjs`: animierter, isometrischer **2.5D**-Canvas-Raum.
+- `app.mjs`: UI, Navigation, Interaktion, Spielstand.
+- `styles.css`: responsive Oberfläche.
+- `scripts/build_bundle.py`: Erstellt das Produktions-Bundle aus modularen Quelldateien mit `python scripts/build_bundle.py`.
 
-## Qualitätssicherung
+## Funktionen
 
-- `node --test tests/engine.test.mjs` – Wirtschafts-, Persistenz- und Langzeittests.
-- `python tests/browser_smoke.py` – lokales UI-Smoketest-Skript für Chromium/Playwright. Weil lokale URL-Navigation der verwendeten Testumgebung administrativ blockiert war, werden die identischen Quelldateien für den Test zu einem **temporären In-Memory-Bundle** verbunden und per `page.set_content` in Chromium geladen. Es wurden **keine realen HTTP-Aufrufe** getestet; der Screenshot-Test erfasst die tatsächliche Browserdarstellung des eingebetteten Bundles. Screenshots liegen im externen Releasepaket unter `screenshots/`.
-- Hardwaretest auf physischem Android-Gerät und Online-Test der GitHub-Pages-Adresse: gesondert durchführen, falls nicht ausdrücklich als bestanden vermerkt.
+- 12 synthetische Aktienwerte aus 4 Branchen; Kauf/Verkauf mit Spread und Gebühren; Einstand, realisierte und unrealisierte Ergebnisse, Dividenden.
+- 12 Deals aus 4 Private-Markets-Klassen; Due Diligence, Kapitalabrufe, Risiken, laufende Cashflows, Restrukturierung, operative Maßnahmen und Exits.
+- Gemeinsames Modell für Konjunktur, Zinsen, Inflation, Branchen und Unternehmensentwicklung.
+- Büroausbau, Personal, vier Fonds und getrenntes Anlegervermögen mit Commitment, Abrufen, NAV, Gebühren, Carry und Ausschüttungen.
+- Automatisches Speichern via Local Storage, JSON-Export/-Import, Pause und Geschwindigkeiten 1×/3×/10×.
+- Eigene Spielgrafik, keine Drittmodelle, externen Bilddateien, Bibliotheken oder Live-Finanzdaten.
 
-## Daten und Lizenz
+## Tests
 
-Spielgrafik, UI und Simulationsdaten wurden für dieses Projekt erstellt. Keine externen Bilder, Modelle oder Audioassets; keine Drittbibliotheken im Laufzeitpfad.
+- `node --test tests/engine.test.mjs`: **11/11 Tests bestanden**; 100 Monate × 15 Seeds im Langzeitszenario.
+- `python tests/browser_smoke.py`: Chromium/Desktop/Touch-Emulation, Screenshots, UI-Klickpfade, Export/Import; im Testsystem ca. 60 Headless-FPS.
+- Einzelheiten: [`tests/RUN_TESTS.md`](tests/RUN_TESTS.md).
+
+Die Browser-Testumgebung blockierte direktes HTTP und `file://` mit `ERR_BLOCKED_BY_ADMINISTRATOR`. Die Tests spielten daher dieselben Quellen als In-Memory-Bundle ab. Die GitHub-Pages-URL wurde öffentlich abgerufen, **ein interaktiver Live-End-to-End-Test auf dem gehosteten Server und ein Hardwaretest auf echten Smartphones sind nicht nachgewiesen**.
+
+## Hinweis
+
+Ausschließlich fiktive Unternehmen, fiktive Deals und simulierte Finanzdaten. Die Simulation vereinfacht reale wirtschaftliche Risiken und ist kein Anlageberater.
