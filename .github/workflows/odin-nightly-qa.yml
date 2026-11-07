@@ -1,0 +1,43 @@
+name: ODIN Nightly Browser QA
+
+on:
+  push:
+    branches:
+      - odin/private-markets-tycoon-nightly
+    paths:
+      - 'nightly/**'
+      - '.github/workflows/odin-nightly-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: odin-nightly-qa-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test-nightly:
+    name: Chromium gameplay and viewport screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Playwright
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Full game smoke tests and visual screenshot capture
+        run: python nightly/tests/browser_smoke.py
+      - name: Upload browser evidence, including failed screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odin-nightly-browser-evidence
+          path: nightly/qa-artifacts/
+          retention-days: 14
+          if-no-files-found: warn
