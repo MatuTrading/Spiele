@@ -1,0 +1,60 @@
+name: ODIN V11.7 Premium Mobile QA
+on:
+  push:
+    branches: ["odin/private-markets-tycoon-nightly"]
+    paths:
+      - "nightly/v11-original/v11_7/**"
+      - ".github/workflows/odin-v11-7-qa.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: odin-v11-7-nightly
+  cancel-in-progress: false
+jobs:
+  build-and-test:
+    name: Offline Build · Economy · Chromium · Visual QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Assemble 100% offline original-based V11.7
+        run: python nightly/v11-original/v11_7/assemble.py
+      - name: Validate JavaScript syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source=Path('nightly/v11-original/PrivateMarketsTycoon_V11_7_Nightly_Offline.html').read_text('utf-8')
+          assert '<script>' in source and source.rstrip().endswith('</script></body></html>')
+          Path('/tmp/odin-v11-7.js').write_text(source.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/odin-v11-7.js
+      - name: Install Playwright and Chromium
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Four-viewports gameplay, finance and screenshot regression
+        run: python nightly/v11-original/v11_7/qa_smoke.py
+      - name: Investor interactions, save/export, complete image audit, event pauses
+        run: python nightly/v11-original/v11_7/qa_extended.py
+      - name: Upload green offline HTML and test evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PrivateMarketsTycoon-V11-7-MatuTrading-Offline
+          path: |
+            nightly/v11-original/PrivateMarketsTycoon_V11_7_Nightly_Offline.html
+            nightly/v11-original/v11_7/screenshots/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Preserve failed-test screenshot evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PrivateMarketsTycoon-V11-7-QA-Diagnostics
+          path: nightly/v11-original/v11_7/screenshots/
+          retention-days: 14
+          if-no-files-found: warn
