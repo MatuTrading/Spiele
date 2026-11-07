@@ -43,3 +43,22 @@
 - Büro-Canvas wächst mit der Desktop-Kartenhöhe.
 - Screenshots ohne kurzlebige Toast-Overlays; Test findet neueste Version automatisch.
 - Bis zur grünen CI-Abnahme bleibt 0.1 der verifizierte Fallback.
+
+## 2026-11-07 — Abschluss Entwicklungszyklus 2
+- **Version 0.2 ist im Chromium erfolgreich abgenommen:** GitHub Actions Run 42341253507 (Commit e3a4cce113c5).
+- **PASS 28/28:** 7 Real-Browserprüfungen auf 360×800, 390×844, 768×1024, 1440×900.
+- Startdialog, 6 Navigationseinträge, Aktienkauf, Due Diligence, Monatsfortschritt, Autosave+Reload, Einstellungen+Exportoberfläche und Layout ohne Body-Horizontaloverflow bestanden.
+- Browser hat keinerlei Pageerrors/Console-Errors gemeldet.
+- Tatsächliche Screenshots im Artefakt https://github.com/MatuTrading/Spiele/actions/runs/42341253507/artifacts/13561059646.
+- Screenshots nach dem Test visuell geöffnet (360 und 390 Smartphone, 1440 Desktop). Die zuvor beobachtete doppelte Tutorial-/Missionseinblendung ist behoben; Büro füllt Desktop-Panel besser. Auf kleinem Handy bleibt bewusst eine 7-Tabs-Navigation, aktuell nicht abgeschnitten.
+- 72-Monats-Pure-Engine-Simulation des Release-Codes vor Commit ohne Exception; alle vier Assetklassen vorhanden.
+- Rollback: eigenständig spielbare 0.1 Datei liegt unverändert weiter im Branch.
+- Hardware-Tests, Langzeit-Gaming, vollständiger Investment-Cashflow-/Fonds-Flow weiterhin NOT TESTED.
+- Nachprüfbare Artefakte und Spielstartlinks: siehe nightly/README.md.
+- Branch-only GitHub CI läuft nach Änderung an Workflow neu und erstellt nun auch ein HTML-Downloadpaket, falls der Test grün ist.
+
+## Offene nächste Prioritäten
+1. Original V11.0 Datei zugänglich machen, Quellstand eindeutig abgleichen; bis dahin keine als V11 ausgegebenen Änderungen.
+2. Längere simulierte Spielerstrategien, Cashflow-/Fondsauflage-/Investitions/Exittest ergänzen.
+3. Die UI-Grafik konsequent in Richtung Mobile-Spiel weiterentwickeln; visuell auf vier Viewports prüfen.
+4. Nach jedem Durchlauf Commit+CI+Screenshots+State; fehlerhafte Vorschau nicht als stabil deklarieren.
