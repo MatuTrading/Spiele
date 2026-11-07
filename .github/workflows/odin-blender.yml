@@ -18,8 +18,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: odin-blender-${{ github.ref }}
-  cancel-in-progress: true
+  group: odin-blender-${{ github.sha }}
+  cancel-in-progress: false
 jobs:
   generate:
     strategy:
