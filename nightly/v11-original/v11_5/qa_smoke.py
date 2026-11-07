@@ -41,10 +41,10 @@ with sync_playwright() as p:
         assert back=={"tab":"funds","selected":"own1","amount":50000},f"Wrong fund navigation: {back}"
         assert page.locator(".odin-ready-pill").count()>0,"Missing visible payout badge"
         mission_hidden = page.evaluate("""() => {
-            const f=state.funds[0], oldMonth=state.month, oldHolds=f.holdings;
-            f.holdings=[{name:'Test'}]; state.month=3;
+            const f=state.funds[0], oldMonth=state.month, oldHolds=f.holdings, oldCommit=f.commitmentTotal;
+            f.holdings=[{name:'Test'}]; f.commitmentTotal=1000; state.month=3;
             const result=odinMission();
-            f.holdings=oldHolds; state.month=oldMonth;
+            f.holdings=oldHolds; f.commitmentTotal=oldCommit; state.month=oldMonth;
             return result==='';
         }""")
         assert mission_hidden, "Completed tutorial still clutters playing view"
