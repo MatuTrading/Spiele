@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "odin-3d-studio-viewer",
+  "version": "2.0.0",
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "three": "0.169.0"
+  }
+}
