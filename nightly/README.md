@@ -1,3 +1,16 @@
+# NEUESTE SPIELBARE ORIGINAL-VERSION: PRIVATE MARKETS TYCOON V11.6
+
+**Bestätigt am 07.11.2026 – GitHub Actions PASS:** [Chromium-/Gameplay-Tests](https://github.com/MatuTrading/Spiele/actions/runs/42370268266). [Offline-HTML mit Screenshots herunterladen](https://github.com/MatuTrading/Spiele/actions/runs/42370268266/artifacts/13573278348) (GitHub-Actions-ZIP, Login kann erforderlich sein).
+
+V11.6 baut auf der echten Premium-V11.0-Linie auf und enthält die stabilen Verbesserungen bis V11.4 sowie zwei weitere UI/UX-Zyklen:
+- V11.5: intuitive Erklärung der nächsten Aktion, einfachere Kapitalabruf-/Ausschüttungsbegriffe, nach Abschluss verschwindende Einstiegsmission.
+- V11.6: Anlegergespräch auf dem ersten Smartphone-Bildschirm sichtbar, große Illustration nach der Aktion, Marktdaten in einklappbarer Statusansicht.
+- Vier Chromium-Screenauflösungen automatisiert getestet, Screenshots der Änderungen tatsächlich betrachtet. Kein physischer Smartphone-Hardwaretest.
+
+**Wiederaufbau:** `python nightly/v11-original/v11_6/assemble.py`. `main`, Releases und Pages sind nicht geändert worden.
+
+---
+
 # Aktuell: Original-basiertes Private Markets Tycoon V11.4 – im Chromium getestet
 
 **Neueste Version (07.11.2026): V11.4 Nightly Evolution**, tatsächlich auf Basis des vom Nutzer hochgeladenen 9,4-MB-V11.0-Premium-Spiels weiterentwickelt. Bisherige 0.2 Preview siehe Archivhinweis weiter unten; **nicht mehr neueste getestete Version**.
