@@ -272,7 +272,7 @@ def make_clips(arm, names):
                     if bname=='Head': x=-.22*phase
                     if bname.startswith('UpperArm'): z=.23*phase
                 elif clip=='Death':
-                    if bname=='Root': y=-1.37*phase
+                    if bname=='Root': x=1.35*phase
                     if bname=='Spine': x=.18*phase
                     if bname.startswith('UpperArm'): y=.23*phase
                     if bname.startswith('Thigh'): x=.28*phase
@@ -295,44 +295,102 @@ def make_clips(arm, names):
 
 
 def make_world(job):
+    """Build a bounded, gameplay-readable Nordic village from reproducible geometry."""
     random.seed(int(job.get('seed', 17)))
-    grass=material('tundra','#6F8061')
-    earth=material('earth','#63554B')
-    timber=material('timber','#6F4630')
-    roof=material('slate_roof','#384F4C')
-    light=material('stone','#99A49D')
-    fire=material('ember','#ED852C')
-    leaf=material('conifer','#365B48')
-    cube('Ground',(0,0,-.19),(18,18,.35),grass,bevel=.08)
-    for i in range(2):
-        x=(-3.5 if i==0 else 3.6); y=1.25 if i==0 else 2.4
-        cube('Longhouse_'+str(i),(x,y,.9),(3.5,2.5,1.8),timber,bevel=.06)
-        # Two pitched roof surfaces (steep gables, lowpoly).
-        for s in (-1,1):
-            o=cube('Roof_'+str(i)+'_'+str(s),(x+s*.66,y,2.04),(2,2.9,.15),roof)
-            o.rotation_euler[1]=s*math.radians(29)
-        cube('VikingDoor_'+str(i),(x,y-1.29,.66),(.7,.10,1.3),earth)
-        for xx in (-1.6,1.6):
-            cylinder('Support', (x+xx,y-1.16,0), (x+xx,y-1.16,1.85),.105,light)
-    for n in range(9):
-        theta=n*2*math.pi/9
-        x=6.8*math.cos(theta);y=6.9*math.sin(theta)
-        height=random.uniform(2.0,3.7)
-        cylinder('PineTrunk',(x,y,0),(x,y,height*.66),.17,timber)
-        for k in range(3):
-            z=height*(.47+k*.17)
-            cylinder('PineBranches',(x,y,z-.60),(x,y,z+.45),.85*(1-k*.22),leaf,vertices=7,radius_end=0)
-    for i in range(14):
-        x=random.uniform(-7,7);y=random.uniform(-7,7)
-        sphere('Boulder',(x,y,.13),(.15+random.random()*.20,.19,.13),light,segments=9,rings=5)
+    grass = material('MossyHeather', '#65775E')
+    earth = material('PackedEarth', '#866E53')
+    timber = material('DeepOak', '#6F4630')
+    planks = material('CedarPlanks', '#AD754C')
+    roof = material('BlueSlate', '#405B59')
+    thatch = material('StrawThatch', '#B1A16B')
+    stone = material('Granite', '#96A19B')
+    fire = material('FireOrange', '#FA8D37')
+    leaves = material('PineNeedles', '#315E47')
+    metal = material('ForgedIron', '#566A73', .60)
+    banner = material('OdinBlueBanner', '#31566C')
+    cube('Ground', (0, 0, -.20), (24, 24, .35), grass, bevel=.10)
+    # A winding but unambiguous central pedestrian path and a public square.
+    for y, x, width in [(-10,0,2.5),(-7,.3,2.7),(-4,.2,2.5),(-1,0,3.0),(3,.2,2.4),(7,.4,2.1)]:
+        cube('VillagePath', (x,y,-.008), (width,3.2,.035), earth, bevel=.07)
+    cube('MarketSquare', (0,.3,.003), (5.1,4.0,.05), earth, bevel=.25)
+
+    def house(x,y,wide=3.6,deep=3.0,high=1.85,material_roof=None):
+        rmat = material_roof or roof
+        cube('LonghouseTimberShell',(x,y,high*.5),(wide,deep,high),timber,bevel=.06)
+        for side in (-1,1):
+            xx=x+side*wide*.49
+            for yy in (-deep*.35, 0, deep*.35):
+                cube('VerticalLog',(xx,y+yy,high*.50),(.12,.16,high*1.03),planks,bevel=.02)
+        for yy in (-deep*.40, deep*.40):
+            cube('CrossBeam',(x,y+yy,high*.88),(wide+.1,.13,.13),planks,bevel=.015)
+        # Explicit pitched roof slopes with exposed ridge cap and gable beam.
+        for side in (-1,1):
+            panel=cube('PitchedRoof',(x+side*wide*.27,y,high+.49),
+                       (wide*.65,deep+.42,.14),rmat,bevel=.018)
+            panel.rotation_euler[1]=side*math.radians(37)
+        cylinder('RoofRidge',(x,y-deep*.57,high+.84),(x,y+deep*.57,high+.84),.065,planks)
+        cube('FrontDoor',(x,y-deep*.51,.67),(.72,.10,1.30),earth,bevel=.02)
+        sphere('DoorHandle',(x+.24,y-deep*.58,.69),(.05,.04,.05),metal)
+        cylinder('DoorBeam',(x-.48,y-deep*.54,1.38),(x+.48,y-deep*.54,1.38),.07,planks)
+        for side in (-1,1):
+            for zz in (.4,1.16):
+                cube('WallLogRib',(x+side*wide*.50,y,zz),(.12,deep,.07),planks)
+            sphere('ShieldOnWall',(x+side*wide*.28,y-deep*.52,1.05),(.22,.055,.22),banner)
+            sphere('ShieldBoss',(x+side*wide*.28,y-deep*.58,1.05),(.065,.040,.065),metal)
+        return (x,y)
+
+    house(-5.2,-3.7,3.7,3.0,1.85,roof)
+    house(5.0,-3.2,3.8,3.0,1.9,thatch)
+    house(-5.1,4.2,3.5,3.2,1.7,thatch)
+    house(5.0,4.5,3.9,3.4,2.0,roof)
+
+    # Watchtower platforms and support beams at opposite corners.
+    for tx,ty in [(-8.4,-7.7),(8.5,7.8)]:
+        for dx in (-.66,.66):
+            for dy in (-.66,.66):
+                cylinder('WatchtowerSupport',(tx+dx,ty+dy,.0),(tx+dx,ty+dy,3.05),.16,timber)
+        cube('WatchtowerDeck',(tx,ty,2.82),(1.85,1.85,.22),planks,bevel=.03)
+        for dx in (-.82,.82):
+            for dy in (-.82,.82):
+                cylinder('Battlement',(tx+dx,ty+dy,2.9),(tx+dx,ty+dy,3.65),.10,timber)
+        cube('TowerRoof',(tx,ty,3.65),(2.10,2.08,.20),roof,bevel=.04)
+        for j in range(5):
+            cube('LadderRung',(tx-.92,ty-.78,.36+j*.47),(.65,.13,.085),planks)
+    # South gate, perimeter palisade, and deliberate gateway opening.
+    for side in (-1,1):
+        gx=side*1.65
+        cylinder('GatePost',(gx,-9.4,0),(gx,-9.4,3.15),.23,timber,vertices=9)
+    cube('GateCrossbar',(0,-9.4,2.76),(3.65,.35,.26),planks)
+    cube('OdinGateBanner',(0,-9.55,2.2),(1.0,.07,.70),banner)
+    for i in range(42):
+        t=2*math.pi*i/42
+        px=9.8*math.cos(t);py=9.7*math.sin(t)
+        if py < -8.9 and abs(px)<2.0:
+            continue
+        cylinder('PalisadeStake',(px,py,0),(px,py,1.8),.18,timber,vertices=7,radius_end=.02)
+    # Forest outside the square, avoid blocking paths, buildings and gate.
+    forest=[(-10.7,2),(-10.5,7),(-9,10.7),(-3.6,10.8),(1,10.4),(6.4,10.5),
+            (10.4,3.6),(10.4,-2),(8,-10.7),(4.8,-10.4),(-5.2,-10.8),(-10.5,-4.5)]
+    for i,(x,y) in enumerate(forest):
+        h=random.uniform(2.4,4.2)
+        cylinder('PineTrunk',(x,y,0),(x,y,h*.70),.14,timber)
+        for n in range(3):
+            zz=h*(.43+n*.18)
+            cylinder('PineCanopy',(x,y,zz-.58),(x,y,zz+.54),.72*(1-n*.19),leaves,
+                     vertices=7,radius_end=0)
+    for i in range(28):
+        x=random.uniform(-10.8,10.8);y=random.uniform(-10.8,10.8)
+        if abs(x)<1.9 and abs(y)<9.5:continue
+        sphere('GraniteRock',(x,y,.13),(.14+random.random()*.22,.20,.13),stone,
+               segments=9,rings=6)
+    # Central firepit and decorated gathering square.
     for i in range(10):
-        x=random.uniform(-2,2)
-        cylinder('Palisade',(x,-4.3,0),(x,-4.3,1.15),.13,timber,vertices=7,radius_end=.02)
-    for i in range(8):
-        angle=i*math.pi/4
-        x=1.6*math.cos(angle);y=-.7+1.6*math.sin(angle)
-        sphere('CampfireStone',(x,y,.14),(.26,.27,.17),light,segments=8,rings=6)
-    cylinder('FireCore',(0,-.7,0),(0,-.7,.67),.25,fire,vertices=8,radius_end=0)
+        angle=i*2*math.pi/10
+        x=1.05*math.cos(angle);y=.35+1.05*math.sin(angle)
+        sphere('HearthStone',(x,y,.12),(.21,.22,.15),stone,segments=9,rings=6)
+    cylinder('FirepitEmbers',(0,.35,.04),(0,.35,.80),.22,fire,vertices=7,radius_end=0)
+    for x,y in [(-1.85,.4),(1.85,.4),(-1.6,1.2),(1.6,1.2)]:
+        cube('FeastBench',(x,y,.35),(1.15,.32,.13),planks,bevel=.04)
     return None
 
 
@@ -375,7 +433,7 @@ def setup_render(job):
     sc=bpy.context.scene
     sc.render.engine='CYCLES'
     sc.cycles.samples=int(job.get('render_samples',12))
-    bpy.context.view_layer.cycles.use_denoising=False  # Ubuntu Blender package lacks OpenImageDenoiser
+    bpy.context.view_layer.cycles.use_denoising=False  # runner Blender has no OpenImageDenoiser
     sc.render.resolution_x=sc.render.resolution_y=int(job.get('render_size',480))
     sc.render.resolution_percentage=100
     sc.render.image_settings.file_format='PNG'
@@ -411,12 +469,14 @@ def render_previews(output,job):
         size=4.4; target=(0,0,1.22)
         viewpoints={
            'front':(0,-6,2.25), 'left':(-6,0,2.15),
-           'back':(0,6,2.25), 'threequarter':(-4.3,-5,2.8)
+           'right':(6,0,2.15), 'back':(0,6,2.25),
+           'threequarter':(-4.3,-5,2.8)
         }
     else:
-        size=20;target=(0,0,1.1)
-        viewpoints={'front':(0,-24,12),'left':(-24,0,11),'back':(0,24,12),
-                    'threequarter':(-19,-23,18)}
+        size=30;target=(0,0,1.1)
+        viewpoints={'front':(0,-29,14),'left':(-29,0,14),
+                    'right':(29,0,14),'back':(0,29,14),
+                    'threequarter':(-25,-30,24)}
     cam=studio_camera(viewpoints['front'],target,size)
     for name,pos in viewpoints.items():
         cam.location=pos
@@ -425,7 +485,7 @@ def render_previews(output,job):
         bpy.ops.render.render(write_still=True)
         print('ODIN_RENDERED',name,flush=True)
     if ARMATURE:
-        for clip, frame in [('Walk',9),('Attack',13),('Attack',23),('Death',27)]:
+        for clip, frame in [('Walk',9),('Run',7),('Attack',13),('Attack',23),('Death',35)]:
             for track in ARMATURE.animation_data.nla_tracks:
                 track.mute=(track.name!=clip)
             sc.frame_set(frame)
