@@ -28,3 +28,18 @@
 - Vor jedem Schreibzugriff aktuellen Branch-Head prüfen; bei unerwarteten Änderungen erneut laden.
 - Einen erfolgreichen Testlauf dokumentieren, keine reine Analyse als Entwicklungszyklus zählen.
 - Im Zweifel nur Nightly-Dateien ändern. Kein Merge, kein Main-Push, keine Seitenveröffentlichung ohne Freigabe.
+
+## 2026-11-07 Browserabnahme Preview 0.1
+- GitHub Actions run 42340781068, commit 94e010c5d7: PASS.
+- 4 Bildschirmgrößen × 7 Szenariotests = 28/28 PASS, keine Console- oder Pageerrors.
+- Startdialog, sechs Navigationsseiten, Aktienkauf, DD, Monatsvorschub, LocalStorage-Reload, Einstellungen und Export-UI verifiziert.
+- Elf Chromium-Screenshots gesichert: https://github.com/MatuTrading/Spiele/actions/runs/42340781068/artifacts/13561915287
+- Screenshots visuell ausgewertet: doppelte Tutorial-/Mission-Banner sowie ungenutzte Büro-Panel-Höhe auf Desktop.
+- STATUS: Preview 0.1 funktional im Chromium-Smoke verifiziert; kein Hardwaretest; Original V11 weiterhin unabhängig.
+
+## Version 0.2 – Quality-of-Life Korrektur (Tests nach Commit ausstehend)
+- Erstelle einen eindeutigen einzelnen Missionshinweis statt Dopplung.
+- Zeige Tutorial auf Unterseiten nur, wenn es zur aktuellen Zielseite gehört.
+- Büro-Canvas wächst mit der Desktop-Kartenhöhe.
+- Screenshots ohne kurzlebige Toast-Overlays; Test findet neueste Version automatisch.
+- Bis zur grünen CI-Abnahme bleibt 0.1 der verifizierte Fallback.

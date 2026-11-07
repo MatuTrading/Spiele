@@ -5,7 +5,8 @@ on:
     branches:
       - odin/private-markets-tycoon-nightly
     paths:
-      - 'nightly/**'
+      - 'nightly/*Offline.html'
+      - 'nightly/tests/**'
       - '.github/workflows/odin-nightly-qa.yml'
   workflow_dispatch:
 

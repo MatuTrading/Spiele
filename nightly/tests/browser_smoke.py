@@ -2,12 +2,17 @@
 """ODIN Nightly browser QA. Tests the branch preview, not the inaccessible V11 upload."""
 import asyncio
 import json
+import re
 import sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-GAME = ROOT / "PrivateMarketsTycoon_NightlyPreview_0_1_Offline.html"
+def version_key(path):
+    match = re.search(r"NightlyPreview_(\\d+)_(\\d+)_Offline", path.name)
+    return tuple(map(int, match.groups())) if match else (0, 0)
+FILES = list(ROOT.glob("PrivateMarketsTycoon_NightlyPreview_*_Offline.html"))
+GAME = max(FILES, key=version_key) if FILES else ROOT / "MISSING-NIGHTLY-HTML.html"
 OUT = ROOT / "qa-artifacts"
 SIZES = [(360, 800), (390, 844), (768, 1024), (1440, 900)]
 PAGES = ["overview", "market", "private", "company", "funds", "journal"]
@@ -56,9 +61,11 @@ async def test_viewport(browser, width, height):
         for target in PAGES:
             await nav(target)
             if width == 390:
+                await page.locator("#toastStack").evaluate("(el) => el.replaceChildren()")
                 await page.screenshot(path=str(OUT / f"{name}-{target}.png"))
         await nav("overview")
-        assert await page.locator(".nightly-coach").is_visible()
+        banners = await page.locator(".tutorial-bar, .nightly-coach").count()
+        assert banners == 1, f"Found {banners} competing mission banners"
     async def trading():
         await nav("market")
         await page.locator("#sharesInput").fill("1")
@@ -101,6 +108,7 @@ async def test_viewport(browser, width, height):
             nav_metrics = await page.locator("#mobileNavigation button").evaluate_all(
                 "(items) => items.map(el => ({w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height,label:el.getAttribute('aria-label')||el.innerText}))")
             assert all(x["h"] >= 44 and x["w"] >= 42 for x in nav_metrics), str(nav_metrics)
+        await page.locator("#toastStack").evaluate("(el) => el.replaceChildren()")
         await page.screenshot(path=str(OUT / f"{name}-overview-final.png"), full_page=True)
     try:
         await step("Startdialog und Spielstart", start)
