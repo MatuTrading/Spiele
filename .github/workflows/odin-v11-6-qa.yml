@@ -36,12 +36,20 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Run mobile and desktop gameplay
         run: python nightly/v11-original/v11_6/qa_smoke.py
-      - name: Upload playable HTML and screenshots
-        if: always()
+      - name: Upload verified HTML and screenshots
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: PrivateMarketsTycoon-V11-5-Nightly-Offline
+          name: PrivateMarketsTycoon-V11-6-Nightly-Offline
           path: |
             nightly/v11-original/PrivateMarketsTycoon_V11_6_Nightly_Offline.html
             nightly/v11-original/v11_6/screenshots/
           retention-days: 30
+      - name: Preserve screenshots after failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PrivateMarketsTycoon-V11-6-Diagnostics
+          path: nightly/v11-original/v11_6/screenshots/
+          retention-days: 14
+          if-no-files-found: ignore
