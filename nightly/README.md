@@ -1,3 +1,19 @@
+# Aktuell: Original-basiertes Private Markets Tycoon V11.4 – im Chromium getestet
+
+**Neueste Version (07.11.2026): V11.4 Nightly Evolution**, tatsächlich auf Basis des vom Nutzer hochgeladenen 9,4-MB-V11.0-Premium-Spiels weiterentwickelt. Bisherige 0.2 Preview siehe Archivhinweis weiter unten; **nicht mehr neueste getestete Version**.
+
+- **GitHub-Abnahme V11.4:** https://github.com/MatuTrading/Spiele/actions/runs/42342434798 (PASS, Chromium, vier Viewports, Ausschüttungsbanner und Navigation)
+- **HTML herunterladen:** Öffne den Actions-Lauf und lade das Artefakt `PrivateMarketsTycoon-V11-4-Nightly-Offline` herunter (enthält HTML und Screenshots; Artefakte sind zeitlich begrenzt).
+- **Dauerhaft gespeicherte Quellen und Zusammenbau:** https://github.com/MatuTrading/Spiele/tree/odin/private-markets-tycoon-nightly/nightly/v11-original
+- **Reproduzierbar erstellen:** `python nightly/v11-original/v11_4/assemble.py` (erzeugt spielbare, vollständig offline nutzbare HTML-Datei)
+- **Progress/QA:** `nightly/STATE.md` und `nightly/v11-original/STATE.md`. Lokale QA 34/34 PASS; Langzeitsimulationen 15/15 PASS.
+
+Der `main`-Branch und veröffentlichte GitHub-Pages-Versionen blieben unverändert.
+
+---
+
+## Älteres Archiv (Preview 0.2, separate Codebasis)
+
 # ODIN Private Markets Tycoon — Nightly Preview
 
 **Status:** eigenständiger, im Chromium getesteter Entwicklungsprototyp auf Basis des bereits vorhandenen `capital-empire/index.html`. **Kein Nachweis, dass dies die Bearbeitung der separat hochgeladenen V11.0 ist**; deren Quellcode war in dieser Entwicklungsumgebung nicht lesbar. Produktiven `main` unverändert lassen.
