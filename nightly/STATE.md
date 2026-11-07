@@ -1,3 +1,11 @@
+# AKTUELLER STABILER NIGHTLY-STAND: ORIGINALBASIERTE V11.6 (07.11.2026)
+
+**V11.6 ist ab sofort die neueste grün getestete Version.** GitHub Actions Run: https://github.com/MatuTrading/Spiele/actions/runs/42370268266 (PASS), Download-Artefakt: https://github.com/MatuTrading/Spiele/actions/runs/42370268266/artifacts/13573278348. Reproduzierbarer Stand: `python nightly/v11-original/v11_6/assemble.py`; Original-V11.4-Quellen, V11.5- und V11.6-UI-Patches bleiben versioniert und separat erhalten. V11.5 führte kontextabhängige nächste Schritte und verständliche LP-Aktionslabels ein; V11.6 verbessert den ersten Smartphone-Bildschirm deutlich: Investorengespräch ohne Scrollen, Finanz-/Marktdaten unter aufklappbaren Statusinformationen. Zweimal lokal mit Node-Checks und UI-Tests iteriert, auf 360×800 und 390×844 in echtem Chromium bestätigt; visuelle Screenshots auf Mobile und Desktop tatsächlich geöffnet. CI-V11.6: vier Chromium-Viewports, Payout-Klickpfad, Navigation, Tipphandling/Anlegerdialog lokal, Mission/Labels, keine Console-/Pageerrors. Ein erster V11.5-CI-Lauf schlug wegen unvollständiger QA-Testvorgaben fehl, wurde korrigiert und anschließend erfolgreich wiederholt. V11.4 bleibt älterer Rollback. Physischer Android-Test und vollständige visuelle Geräteprüfung NICHT TESTED.
+
+**Fortsetzung:** Jeder neue Nachtlauf startet vom neuesten grünen Stand V11.6, nicht vom historischen V11.4-Stand oder Preview 0.2. Nach jeder erfolgreichen Änderung neueste getestete Version sichern, nur in diesem Branch schreiben und neue QA bestätigen. `main` und GitHub Pages unverändert lassen.
+
+---
+
 # STABILE BASIS: Private Markets Tycoon V11.4 – Original Premium, Stand 07.11.2026
 
 **Aktuellste bestätigte Original-basierte Nightly-Version: V11.4.** GitHub Actions `ODIN V11.4 Nightly Original QA` Run **42342434798**, Commit `618d18dbb55a020bb33b760ea4babcf9844a60f9`, abgeschlossen mit PASS (Chromium vier Viewports, Spielstart, Mission, Navigation, Ausschüttungsbanner, Klick zum korrekten Fonds, keine JavaScript-Fehler, keine kaputten Bilder/Überläufe). Reproduzierbarer 9,4-MB-Offline-Build (23 Quellteile): `python nightly/v11-original/v11_4/assemble.py`. Das Artefakt der erfolgreichen CI-Läufe enthält vollständiges HTML + echte Screenshots; lokale HTML- und ZIP-Pakete wurden erzeugt.
