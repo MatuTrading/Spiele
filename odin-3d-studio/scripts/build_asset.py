@@ -375,7 +375,7 @@ def setup_render(job):
     sc=bpy.context.scene
     sc.render.engine='CYCLES'
     sc.cycles.samples=int(job.get('render_samples',12))
-    bpy.context.view_layer.cycles.use_denoising=True
+    bpy.context.view_layer.cycles.use_denoising=False  # Ubuntu Blender package lacks OpenImageDenoiser
     sc.render.resolution_x=sc.render.resolution_y=int(job.get('render_size',480))
     sc.render.resolution_percentage=100
     sc.render.image_settings.file_format='PNG'
