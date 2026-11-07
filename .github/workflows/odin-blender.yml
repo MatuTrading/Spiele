@@ -52,6 +52,19 @@ jobs:
       - name: Validate binary GLB and render evidence
         run: |
           python3 odin-3d-studio/scripts/validate_assets.py --output output --job "odin-3d-studio/jobs/${{ matrix.job }}"
+      - name: Bundle portable Three.js animation viewer
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix odin-3d-studio/viewer --no-audit --no-fund
+          mkdir -p output/viewer
+          odin-3d-studio/viewer/node_modules/.bin/esbuild odin-3d-studio/viewer/app.js --bundle --minify --format=esm --outfile=output/viewer/viewer.bundle.js
+          cp odin-3d-studio/viewer/index.html output/viewer/index.html
+          MODEL_FILE="$(find output -maxdepth 1 -name '*.glb' -printf '%f\n' | head -n1)"
+          test -n "$MODEL_FILE"
+          cp "output/$MODEL_FILE" output/viewer/
+          python3 -c 'import json,sys;print(json.dumps({"model":sys.argv[1]}))' "$MODEL_FILE" > output/viewer/asset-manifest.json
+          node --check output/viewer/viewer.bundle.js
       - name: Upload generated files and diagnostic logs
         if: always()
         uses: actions/upload-artifact@v4
