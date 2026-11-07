@@ -22,6 +22,10 @@ concurrency:
   cancel-in-progress: true
 jobs:
   generate:
+    strategy:
+      fail-fast: false
+      matrix:
+        job: [example_character.json, example_world.json]
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -38,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p output
-          JOB="${{ github.event.inputs.job }}"
+          JOB="${{ matrix.job }}"
           if [ -z "$JOB" ]; then JOB='example_character.json'; fi
           case "$JOB" in
             example_character.json|example_world.json) ;;
@@ -47,12 +51,12 @@ jobs:
           blender --background --factory-startup --python odin-3d-studio/scripts/build_asset.py -- --job "odin-3d-studio/jobs/$JOB" --output output 2>&1 | tee output/blender.log
       - name: Validate binary GLB and render evidence
         run: |
-          python3 odin-3d-studio/scripts/validate_assets.py --output output --job "odin-3d-studio/jobs/${{ github.event.inputs.job || 'example_character.json' }}"
+          python3 odin-3d-studio/scripts/validate_assets.py --output output --job "odin-3d-studio/jobs/${{ matrix.job }}"
       - name: Upload generated files and diagnostic logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: odin-blender-${{ github.run_number }}
+          name: odin-blender-${{ matrix.job }}-${{ github.run_number }}
           path: output/
           if-no-files-found: warn
           retention-days: 14
