@@ -9,7 +9,7 @@ from playwright.async_api import async_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 def version_key(path):
-    match = re.search(r"NightlyPreview_(\\d+)_(\\d+)_Offline", path.name)
+    match = re.search(r"NightlyPreview_(\d+)_(\d+)_Offline", path.name)
     return tuple(map(int, match.groups())) if match else (0, 0)
 FILES = list(ROOT.glob("PrivateMarketsTycoon_NightlyPreview_*_Offline.html"))
 GAME = max(FILES, key=version_key) if FILES else ROOT / "MISSING-NIGHTLY-HTML.html"
