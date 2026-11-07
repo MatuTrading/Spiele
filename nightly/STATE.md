@@ -1,3 +1,13 @@
+# WICHTIG: Aktuellste geprüfte ORIGINAL-V11-Version (November 2026)
+
+Die hochgeladene Original-V11.0-Datei wurde im aktuellen Entwicklungsdurchlauf erfolgreich eingelesen. Die bisherige Aussage unten, sie sei nicht zugänglich, ist historisch und **nicht mehr aktuell**. **V11.3 Original-based** ist nach 34/34 lokalen Playwright-Prüfungen und dem erfolgreichen GitHub-Actions-Lauf 42341775901 sicher geprüft. Original-V11.3 liegt rekonstruktierbar unter `nightly/v11-original/source/` und `assemble.py`, 23 Teile, unverändert.
+
+**V11.4 Candidate:** Separater, nicht-destruktiver Tail-Delta-Build unter `nightly/v11-original/v11_4/`, Funktion: sofort sichtbare LP-Ausschüttungs-Benachrichtigung mit Navigation zum betroffenen Fonds. Lokale Tests: 34/34 PASS + echter Chromium-Test Banner/Navigation, vier Viewports; GitHub-Actions-Prüfung steht bis zum grünen CI-Lauf aus. Nach grünem CI ist V11.4 die neue stabile Basis. Vermeide zurück zu Nightly Preview 0.2 oder V11.0 zu gehen.
+
+**Fortsetzungsanweisung an Nacht-Automation:** GitHub-Branch `odin/private-markets-tycoon-nightly` verwenden, neueste grüne originale V11.x Version im Verzeichnis `nightly/v11-original/` prüfen, `assemble.py` (V11.3) bzw. `v11_4/assemble.py` (V11.4) ausführen. Danach auf der neuesten grünen Version weiterarbeiten. Niemals Main oder veröffentlichte Version ändern. Bei nichtgrüner V11.4 bleibt V11.3 stabiler Fallback. Prüfe jeden GitHub-Write mit aktuellem Head-SHA.
+
+---
+
 # ODIN Nightly – Projektstand (2026-11-07)
 
 ## Ausgangslage / Provenienz

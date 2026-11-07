@@ -1,7 +1,5 @@
-# ODIN V11.3 original-based progress (2026-11-07)
+# Original-based V11.4 Candidate – 2026-11-07
 
-Base: uploaded PrivateMarketsTycoon_V11_0_Premium_Offline.html (9,409,220 bytes).
-Latest local tested: V11.3 Nightly Evolution. All 34 local Playwright checks PASS. Screenshots inspected at mobile/tablet/desktop.
-Code: 23 source chunks in source/; reconstruct with assemble.py. GitHub Actions builds + verifies + uploads the standalone HTML.
-Preserve the alternative 0.2 Preview separately. Do not overwrite it or main.
-Next: inspect CI run; if red, fix before calling V11.3 GitHub-verified. Then test localStorage reload through a normal served origin, longer 24–72 month strategies, capital-call edge cases, performance and visual polish.
+Provenienz: Vom Nutzer hochgeladenes PrivateMarketsTycoon_V11_0_Premium_Offline.html, 9.409.220 Bytes. Neuester bestätigter GitHub Build: **V11.3**, run 42341775901 PASS. Neue V11.4: Payouts aus sämtlichen älteren und neuen Fonds sichtbar, Klick navigiert zum korrekten Fonds; lokaler Playwright-Suite 34/34 PASS plus interaktiver Banner-Test PASS, HTML/ZIP lokal verfügbar. V11.4 benötigt noch grüne GitHub Actions `ODIN V11.4 Nightly Original QA`, bevor es als GitHub-geprüft zählt. Die 23 Source-Stücke der V11.3 bleiben unverändert, V11.4 ersetzt nur finalen Tail im separaten v11_4-Verzeichnis. 15 lange direkte Browser-Engine-Simulationen zu V11.3 PASS, 1787 Spielmonate, 322 Investments, 776 Ausschüttungen. Keine Hardwaretests durchgeführt. localStorage-Reload nicht getestet, JSON Export/Import getestet.
+
+Next: Nach grüner CI V11.4 als stabil markieren; neue Spielverbesserungen nur von dieser Basis; 24-72-Monats-UI-Spieltests, Touch-Hardware, visuelle Screenshots, Simulationen mit ungewöhnlichen Cashflow-Kanten.
