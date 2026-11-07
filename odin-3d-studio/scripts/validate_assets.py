@@ -25,7 +25,7 @@ def inspect_glb(path):
         if len(binary) != 8:
             raise ValueError('Missing BIN chunk')
         bin_length, bin_type = struct.unpack('<I4s', binary)
-        if bin_type != b'BIN' or bin_length < 1:
+        if bin_type != b'BIN\x00' or bin_length < 1:
             raise ValueError('Invalid binary chunk')
         remaining = stream.read()
         if len(remaining) != bin_length:
