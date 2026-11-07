@@ -62,3 +62,12 @@
 2. Längere simulierte Spielerstrategien, Cashflow-/Fondsauflage-/Investitions/Exittest ergänzen.
 3. Die UI-Grafik konsequent in Richtung Mobile-Spiel weiterentwickeln; visuell auf vier Viewports prüfen.
 4. Nach jedem Durchlauf Commit+CI+Screenshots+State; fehlerhafte Vorschau nicht als stabil deklarieren.
+
+## 2026-11-07 — Releasepaket 0.2 (branch-only)
+- Abschließender GitHub Actions Regressionslauf 42341413066 **PASS**. `nightly/tests/browser_smoke.py` hat explizit 0.2 als Prüfdatei gewählt; sieben Interaktionen auf vier Viewports erfolgreich.
+- CI-Artefakt `odin-nightly-playable`: https://github.com/MatuTrading/Spiele/actions/runs/42341413066/artifacts/13561369400 (enthält offline-HTML und BUILD_INFO).
+- Screenshot-Artefakt: https://github.com/MatuTrading/Spiele/actions/runs/42341413066/artifacts/13561084910.
+- Gelieferte HTML-Datei SHA256: `04aca85a1660ef5bb883d0d85104288b33ad77287cfae32dc15a49520cb83b8f`, rund 95 KB, vollständig inline ohne externe Script-Abhängigkeiten.
+- Standalone-Version für Nutzer auch direkt per `raw.githubusercontent.com` aus dem Branch ladbar. Veröffentlichtes GitHub Pages/main ausdrücklich nicht verändert.
+- Zwei tatsächlich abgeschlossene Verbesserungs-/Testzyklen: 0.1 (Mobile-Navigation + Mission), 0.2 (grafisches Layout / Deduplizierung / QA).
+- Morgenübergabe-Automation täglich um 07:00 Europe/Berlin zusätzlich angelegt.
