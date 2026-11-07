@@ -1,3 +1,13 @@
+# STABILE BASIS: Private Markets Tycoon V11.4 – Original Premium, Stand 07.11.2026
+
+**Aktuellste bestätigte Original-basierte Nightly-Version: V11.4.** GitHub Actions `ODIN V11.4 Nightly Original QA` Run **42342434798**, Commit `618d18dbb55a020bb33b760ea4babcf9844a60f9`, abgeschlossen mit PASS (Chromium vier Viewports, Spielstart, Mission, Navigation, Ausschüttungsbanner, Klick zum korrekten Fonds, keine JavaScript-Fehler, keine kaputten Bilder/Überläufe). Reproduzierbarer 9,4-MB-Offline-Build (23 Quellteile): `python nightly/v11-original/v11_4/assemble.py`. Das Artefakt der erfolgreichen CI-Läufe enthält vollständiges HTML + echte Screenshots; lokale HTML- und ZIP-Pakete wurden erzeugt.
+
+**NÄCHSTER AUTOMATISCHER LAUF:** MUSS vom V11.4-Original-Stand unter `nightly/v11-original/v11_4` ausgehen, NICHT von alter Preview 0.1/0.2 oder V11.0. Original-V11.3 Source-Chunks unter `nightly/v11-original/source` sowie der V11.4-Tail unter `v11_4/part_022.txt` schützen. Verfolge neue Verbesserungen in neuen Versionen (V11.5 usw.) und verwende neueste grüne CI als Basis. Fortschritt im Nightly-Branch versionieren, nur getestete Änderungen freigeben. Niemals `main`, Releases oder GitHub Pages ohne ausdrückliche Freigabe verändern. Bei GitHub-Fehlern letzte grüne V11.4 zurückbehalten. Prüfe vorher Branch-HEAD / Überschneidungen.
+
+**Qualität:** lokale Regression 34/34 PASS, V11.4 Auszahlungsnavigation separat interaktiv Chromium PASS, GitHub Actions 4/4 Viewports PASS. Vorgänger V11.3: 15/15 Direkt-Engine-Langzeitsimulationen über 1.787 Monate, 322 Investments, 776 Ausschüttungen PASS. LocalStorage-Reload über echtes URL-Navigieren wegen Browser-Sperre **NOT TESTED**; Export/Import **PASS**. Echte Android-Hardware **NOT TESTED**.
+
+---
+
 # WICHTIG: Aktuellste geprüfte ORIGINAL-V11-Version (November 2026)
 
 Die hochgeladene Original-V11.0-Datei wurde im aktuellen Entwicklungsdurchlauf erfolgreich eingelesen. Die bisherige Aussage unten, sie sei nicht zugänglich, ist historisch und **nicht mehr aktuell**. **V11.3 Original-based** ist nach 34/34 lokalen Playwright-Prüfungen und dem erfolgreichen GitHub-Actions-Lauf 42341775901 sicher geprüft. Original-V11.3 liegt rekonstruktierbar unter `nightly/v11-original/source/` und `assemble.py`, 23 Teile, unverändert.
