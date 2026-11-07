@@ -34,6 +34,21 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Full game smoke tests and visual screenshot capture
         run: python nightly/tests/browser_smoke.py
+      - name: Package verified standalone HTML
+        if: success()
+        run: |
+          mkdir -p nightly/delivery
+          latest="$(ls nightly/PrivateMarketsTycoon_NightlyPreview_*_Offline.html | sort -V | tail -n 1)"
+          cp "$latest" nightly/delivery/PrivateMarketsTycoon_Nightly_Offline.html
+          printf 'Version: %s\nSource: Capital Empire Nightly Preview, not original V11 upload.\nBuild: %s\n' "$latest" "${{ github.sha }}" > nightly/delivery/BUILD_INFO.txt
+      - name: Upload playable offline game
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odin-nightly-playable
+          path: nightly/delivery/
+          retention-days: 14
+          if-no-files-found: error
       - name: Upload browser evidence, including failed screenshots
         if: always()
         uses: actions/upload-artifact@v4
