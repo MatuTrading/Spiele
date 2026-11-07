@@ -220,6 +220,13 @@ body{background:radial-gradient(ellipse at 50% -20%,#263037 0,#0c141b 57%,#090e1
  .metric b{font-size:15px}
  .modal img{max-height:175px}
 }
+.brand .right button{min-width:48px;min-height:48px}
+.head .status-details>summary{min-height:48px;display:flex;align-items:center;justify-content:center}
+.status-details .news-ticker{min-height:48px}
+#screen details>summary{min-height:48px;display:flex;align-items:center;gap:6px}
+#screen .subtle-foot .btn{min-height:48px}
+.ticket-options button,.choices .btn{min-height:48px}
+:where(details>summary):focus-visible{outline:3px solid #f3d7a5;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.odin-time-buttons button:active{transform:none}}
 `;document.head.appendChild(odinV117Style);
 document.title='Private Markets Tycoon V11.7 – Matu Trading';
