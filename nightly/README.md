@@ -1,3 +1,13 @@
+# AKTUELL SPIELBARE ORIGINAL-VERSION: PRIVATE MARKETS TYCOON V11.7
+
+**Stabil / GitHub Chromium PASS:** [Testlauf](https://github.com/MatuTrading/Spiele/actions/runs/42374811272) · [Download (vollständiges Offline-HTML + Screenshots)](https://github.com/MatuTrading/Spiele/actions/runs/42374811272/artifacts/13574933118).
+
+V11.7 aktualisiert den Original-V11-Spielpfad mit originalem Matu-Trading-Logo, intuitiven 1/3/12-Monat-Sprüngen und radikal vereinfachtem Mobile-Dashboard. Mehrfach reale Chromium-Spieltests auf vier Bildschirmgrößen durchgeführt; Asset-Dekodierprüfung 223/223 PASS, Export/Import und tatsächlicher LocalStorage-Reload auf GitHub Actions PASS. Für einen erneuten Build: `python nightly/v11-original/v11_7/assemble.py`.
+
+Die separate ältere Capital-Empire-Preview ist **nicht** die aktuelle Version. Kein Main-/Pages-Deployment. Neuester grüner Stand V11.7, älterer Fallback V11.6.
+
+---
+
 # NEUESTE SPIELBARE ORIGINAL-VERSION: PRIVATE MARKETS TYCOON V11.6
 
 **Bestätigt am 07.11.2026 – GitHub Actions PASS:** [Chromium-/Gameplay-Tests](https://github.com/MatuTrading/Spiele/actions/runs/42370268266). [Offline-HTML mit Screenshots herunterladen](https://github.com/MatuTrading/Spiele/actions/runs/42370268266/artifacts/13573278348) (GitHub-Actions-ZIP, Login kann erforderlich sein).
