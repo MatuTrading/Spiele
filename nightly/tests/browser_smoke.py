@@ -39,7 +39,7 @@ async def test_viewport(browser, width, height):
         await page.locator("#companyInput").wait_for(timeout=15000)
         await page.fill("#companyInput", "ODIN QA")
         await page.locator("#welcomeForm button[type=submit]").click()
-        await page.locator("#modalLayer.hidden").wait_for(timeout=7000)
+        await page.locator("#modalLayer").wait_for(state="hidden", timeout=7000)
         assert "ODIN QA" in await page.locator("#companyBrand").inner_text()
         await page.locator('[data-speed="0"]').click()
     async def nav(target):
