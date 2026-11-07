@@ -1,0 +1,28 @@
+name: ODIN V91 – KayKit animation mask regression
+on:
+  push:
+    branches: [odin/y8-animation-v91]
+    paths:
+      - 'odin-v91/**'
+      - '.github/workflows/odin-v91-mask-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  animation-mask-unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify mask module and KayKit bone naming
+        run: |
+          node --version
+          node --check odin-v91/animation_layers.mjs
+          node --test odin-v91/tests/animation_layers.test.mjs
+      - name: Archive diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odin-v91-mask-diagnostics
+          path: odin-v91/
+          retention-days: 14
