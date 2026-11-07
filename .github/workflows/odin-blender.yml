@@ -1,0 +1,57 @@
+name: ODIN Blender Asset Pipeline
+on:
+  push:
+    branches: [odin/blender-pipeline]
+    paths:
+      - 'odin-3d-studio/**'
+      - '.github/workflows/odin-blender.yml'
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Whitelisted job manifest'
+        type: choice
+        options:
+          - example_character.json
+          - example_world.json
+        required: true
+        default: example_character.json
+permissions:
+  contents: read
+concurrency:
+  group: odin-blender-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout isolated branch
+        uses: actions/checkout@v4
+      - name: Install Blender (Ubuntu repositories)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender
+          blender --version | head -n 3
+      - name: Generate character, animation clips, GLB and preview renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p output
+          JOB="${{ github.event.inputs.job }}"
+          if [ -z "$JOB" ]; then JOB='example_character.json'; fi
+          case "$JOB" in
+            example_character.json|example_world.json) ;;
+            *) echo 'Unexpected job input' >&2; exit 1 ;;
+          esac
+          blender --background --factory-startup --python odin-3d-studio/scripts/build_asset.py -- --job "odin-3d-studio/jobs/$JOB" --output output 2>&1 | tee output/blender.log
+      - name: Validate binary GLB and render evidence
+        run: |
+          python3 odin-3d-studio/scripts/validate_assets.py --output output --job "odin-3d-studio/jobs/${{ github.event.inputs.job || 'example_character.json' }}"
+      - name: Upload generated files and diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odin-blender-${{ github.run_number }}
+          path: output/
+          if-no-files-found: warn
+          retention-days: 14

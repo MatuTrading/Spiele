@@ -1,0 +1,2 @@
+# Blender ships bpy, mathutils and glTF IO; these scripts use Python stdlib only.
+# No pip packages required.

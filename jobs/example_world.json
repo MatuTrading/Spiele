@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "job_id": "viking-camp-v1",
+  "kind": "world",
+  "display_name": "ODIN · Viking Camp",
+  "seed": 17,
+  "render_size": 480,
+  "render_samples": 12
+}
