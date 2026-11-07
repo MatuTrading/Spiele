@@ -1,3 +1,13 @@
+# NEUESTE ORIGINALBASIERTE STABILE VERSION: V11.7 (07.11.2026)
+
+**V11.7 ist die neue grün getestete Basis**. CI-Run [42374811272](https://github.com/MatuTrading/Spiele/actions/runs/42374811272) PASS, vollständiges Offline-HTML + Testscreenshots im [Download-Artefakt](https://github.com/MatuTrading/Spiele/actions/runs/42374811272/artifacts/13574933118). Rebuild: `python nightly/v11-original/v11_7/assemble.py`. Originale V11.3-Quellteile, V11.4-Tail und V11.5/V11.6-Zwischenpatches bleiben unverändert. Die neue Schicht `v11_7/upgrade_v11_7.js` enthält Original-Matu-Trading-Logo, aufgeräumtes Mobile-Dashboard, zeitliches +1/+3/+12 mit monatsweiser `nextMonth`-Buchung, Stopps bei wichtigem Ereignis und kompakte Einführung.
+
+**TESTS:** Vier Viewports 360×800 / 390×844 / 768×1024 / 1440×900 PASS; 1/3/12 Monate gegen separate simulierte Referenzzustände PASS; Investorengespräch PASS; kritische Events unterbrechen PASS; Fonds-/Team-/News-Navigation PASS; Export+Import PASS; echtem LocalStorage-Reload auf GitHub-Actions-Origin PASS; 223/223 Inline-Illustrationen dekodierbar; keine JavaScript-Fehler/externen Fehlabrufe. Visuelle Screenshots geöffnet und die Touchflächen nach einem Fehler mit 45/38px auf mindestens 48px verbessert. Physische Android-Geräte NICHT GETESTET; visuelle Einzelprüfung aller 223 Bilder NICHT erfolgt. 
+
+**Für Nachtläufe:** Beginne ab sofort mit `v11_7/assemble.py` (nicht V11.6, V11.4, Preview). Teste neue Versionen selbst; nur grünes Ergebnis wird neuer stabiler Stand. Keine Änderungen an main, Pages oder Releases ohne Freigabe.
+
+---
+
 # STABILE ORIGINALBASIERTE BASIS: V11.6 (07.11.2026, 12:59 Europe/Berlin)
 
 **Neueste erfolgreich getestete Original-Version: V11.6.** GitHub Actions Chromium Run [42370268266](https://github.com/MatuTrading/Spiele/actions/runs/42370268266) **PASS**, mit Download-Artefakt [PrivateMarketsTycoon-V11-6-Nightly-Offline](https://github.com/MatuTrading/Spiele/actions/runs/42370268266/artifacts/13573278348). Vier Viewports 360×800, 390×844, 768×1024, 1440×900 bestanden die automatisierten Tests: Fondsgründung, Navigation, Ausschüttungsbanner, korrekte Fondsnavigation, kontextabhängige Einstiegshilfe, eindeutige Anlegeraktionen, Tutorial-Ausblendung, mobile Erstbildschirm-Schaltfläche und reduzierte Statusanzeige. Keine JavaScript-Fehler, kaputten Bilder oder horizontalen Überläufe im Test. Manuelle visuelle Screenshotkontrolle für 360, 390 und 1440 sowie lokaler interaktiver Anlegerdialog-Test durchgeführt. Keine echte Android-Hardware getestet.
